@@ -1,0 +1,160 @@
+---
+title: "CLT Project 1: Monte Carlo Investigation"
+subtitle: "An Empirical Evaluation of the Central Limit Theorem"
+author: "Adam Abramyan"
+format:
+  html:
+    toc: true
+    number-sections: true
+    code-fold: true
+    theme: cosmo
+    smooth-scroll: true
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+## 1. Executive Summary: Is $n = 30$ the Magic Number?
+
+The primary goal of this Monte Carlo investigation is to evaluate when the Central Limit Theorem (CLT) works, when it works slowly, and when its assumptions break down. Based on the evidence gathered, $n = 30$ is **not** a universal cutoff for normality.
+
+The rate at which the sampling distribution becomes approximately normal depends heavily on the original population: \* **Symmetric distributions** like the Standard Normal and Six-Sided Die become normal almost immediately. \* **Skewed or discrete distributions** like the Exponential and Small Binomial retain structural character well into higher $n$ values, with the Binomial not forming a standard distribution until after $n = 30$ and the Exponential retaining a slight right skew even at $n = 40$. \* **Heavy-tailed distributions** like the Cauchy do not exhibit consistent adjustments toward normal at any sample size.
+
+------------------------------------------------------------------------
+
+## 2. Methodology & Criteria
+
+### 2.1 Distinguishing $n$ from Monte Carlo Simulations
+
+In this investigation, $n$ represents the number of observations in a single sample, while the number of simulations represents how many samples are repeatedly generated to build the sampling distribution. To improve accuracy, the number of simulations was quadrupled from initial tests, and the $n$ values evaluated were expanded from $10$ to $40$.
+
+### 2.2 Definition of "Approximately Normal"
+
+A distribution is considered "approximately normal" when: 1. The empirical histogram is reasonably bell-shaped and symmetric. 2. The Q-Q plot is approximately linear. 3. Skewness and kurtosis fall to a consistently low level. In this project the values of 0.5 and 0.3 as cutoffs 4. a few things proved not to be helpful simulated standard error closely agreeing with its theoretical prediction did not help greatly. furthermore mean and standard deviation are consistent from the start providing not super useful information.
+
+### 3.1 Standard Normal
+
+- **Original Population:** Symmetrical normal population.
+
+- **Theoretical Parameters:** Mean $= 0$, Standard Deviation $= 1$.
+
+- **Convergence to Normal:** The sampling distribution becomes standard normal immediately, with both sides on skew and kurtosis close to normal from the start.
+
+- **Mean Comparison:** The simulated mean stays at or near $0$, going on both sides.
+
+- **Standard Error Comparison:** Simulated standard errors are all very close to theoretical values, with none further than $0.01$ away on both sides. The mean difference is $-0.00007$.
+
+- **Evidence of Normality:**
+
+  ![Even at n=10, the lowest value measured, the histogram appears to follow a normal distribution.](images/clipboard-3011882603.png)
+
+  ![Q-Q plot at n=10 appears linear.](images/clipboard-1768386639.png)![Both skewness and Kurtosis Shift across n=0 randomly showing that the distribution is normal.](images/clipboard-2790969560.png)
+
+### 3.2 Six-Sided Die
+
+- **Original Population:** Discrete uniform distribution with values 1–6 being equally likely.
+
+- **Theoretical Parameters:** Mean $= 3.5$, Standard Deviation $= 1.708$.
+
+- **Convergence to Normal:** Convergence is immediate, showing a standard distribution with more steps instead of flowing values initially.
+
+- **Mean Comparison:** The simulated mean stays well above $3.49$ but below $3.51$, differing only in the thousandths place from the theoretical $3.5$.
+
+- **Standard Error Comparison:** The SE is similarly close, with a largest difference of $0.0049$ and a mean difference of $0.00007$.
+
+- **Evidence of Normality:** &Insert Histogram and Q-Q plots for Six-Sided Die showing the step-like structure smoothing out as n increases&
+
+  ![Histogram appears approximately normal.](images/clipboard-3701580662.png)
+
+  ![Due to the limited possible values placement of values is segmented, but the data still appears linear.](images/clipboard-1910317298.png)
+
+  ![Skewness appears on both sides of 0, as a normal distribution would. Kurtosis leans negative, but by little enough that it is insignificant and can be considered normal.](images/clipboard-3348570951.png)
+
+### 3.3 Exponential
+
+- **Original Population:** Continuous distribution with a strong right skew.
+
+- **Theoretical Parameters:** Mean $= 1$, Standard Deviation $= 1$.
+
+- **Convergence to Normal:** The distribution skews consistently, but around $n = 18$, kurtosis and standard error fall to a consistent low level. However, the graphs retain a very slight right skew even at $n = 40$.
+
+- **Mean Comparison:** The simulated mean is very close to $1$, with multiple values resulting in a sample mean of exactly one.
+
+- **Standard Error Comparison:** Differences remain small but decrease as $n$ grows. The largest values are in the first five sample sizes (almost double the smallest values), with an overall mean difference of $0.0001$.
+
+- **Evidence of Normality:** &Insert Histogram and Q-Q plots for Exponential highlighting the persistence of the skew up to n=40&
+
+  ![Despite a mild skew in the graph, the distribution is normal with a mode in the center and a fall on both sides.](images/clipboard-3701341258.png)
+
+  ![While each end the q-q plot strays from linear that happens even with the normal distribution and thus is quite acceptable](images/clipboard-3764647691.png)
+
+  ![While not appearing on both sides of 0 both skewness and kurtosis stabilize around 18 showing Normalization.](images/clipboard-2560690516.png)
+
+### 3.4 Binomial Small ($n=5, p=0.10$)
+
+- **Original Population:** Highly discrete and skewed distribution.
+
+- **Theoretical Parameters:** Mean $= 0.5$, Standard Deviation $= 0.671$.
+
+- **Convergence to Normal:** The simulated mean is immediately accurate and standard deviation drops accordingly while kurtosis remains relatively low. However, the graphs keep artifacts of two peaks and develop a third; even at $n = 30$, it has 3 distinct peaks that do not begin to disappear until the mid-thirties. It does not form a standard distribution until $n = 33$.
+
+- **Mean Comparison:** Means are close to the theoretical mean from the get-go and stay similar.
+
+- **Standard Error Comparison:** The standard deviation seems to be the most accurate to the theoretical value out of the tested distributions, with a largest difference of $0.00174$ and a mean difference of $0$.
+
+- **Evidence of Normality:** &Insert Histogram and Q-Q plots for Binomial Small showing the distinct 3-peak structure at n=30&
+
+  ![This graph appears quite normal but still has slight peaks above and below the mean. but they are still much smaller compared to lower n values.](images/clipboard-2930892748.png)
+
+  ![Notice the strange looking trend lines and lack of a single peak when n =15 instead of a greater value.](images/clipboard-3902275426.png)
+
+  ![the below Q-Q plot is very linear showing that the distribution is normal.](images/clipboard-2146891643.png)
+
+  ![Data looks approximately normal from the get go but really stabilizes in the thirties showing that those values](images/clipboard-4134465294.png)
+
+### 3.5 Cauchy
+
+- **Original Population:** Continuous distribution with extremely heavy tails.
+
+- **Theoretical Parameters:** Mean $=$ Undefined, Standard Deviation $=$ Undefined.
+
+- **Convergence to Normal:** The sampling distribution appears not to change, presenting massive kurtosis and standard deviation at all values with inconsistent adjustments towards normal.
+
+- **Mean Comparison:** Since there is no expected sample mean, there is nothing to compare to, and means vary greatly.
+
+- **Standard Error Comparison:** Undefined; therefore, theoretical comparisons cannot be calculated.
+
+- **Evidence of Normality:** &Insert Histogram and Q-Q plots for Cauchy demonstrating extreme outliers and lack of convergence&
+
+  ![Data never changes based on sample size.](images/clipboard-416141530.png)
+
+  ![](images/clipboard-368370707.png)
+
+  ![No consistent patterns are found in the data.](images/clipboard-1789808512.png)
+
+------------------------------------------------------------------------
+
+## 4. Master Comparison Table
+
+| Population | Theoretical $\mu$ | Theoretical $\sigma$ | Empirical Mean | Empirical SE Mean Diff | Convergence Observations |
+|:-----------|:-----------|:-----------|:-----------|:-----------|:-----------|
+| **Standard Normal** | $0$ | $1$ | Stays near $0$ | $-0.00007$ | Immediate |
+| **Six-Sided Die** | $3.5$ | $1.708$ | close to 3.5 from start | $0.00007$ | Immediate (step-like) |
+| **Exponential** | $1$ | $1$ | Very close to $1$ | $0.0001$ | Stabilizes $\sim n=18$, slight skew at $n=40$ |
+| **Binomial Small** | $0.5$ | $0.671$ | Close to 0.5 from start | $0$ | $3$ peaks persist until mid-30s |
+| **Cauchy** | Undefined | Undefined | Varies greatly | Undefined | Never normalizes |
+
+------------------------------------------------------------------------
+
+## 5. Limitations and Surprises
+
+**Limitations:** \* A larger sample size and more Monte Carlo simulations are always useful, but the investigation was limited by compute. \* Only one parameter value was checked for each type of distribution (e.g., a large lambda or a different binomial probability might perform differently). While most data was covered, useful parameters may have been missed.
+
+**Surprises:** \* I was surprised by how much the distributions retained their character even at higher $n$ values. \* The binomial distribution took much longer than expected, not forming a standard distribution until after $n = 30$. \* The exponential graphs retained a very slight right skew even at $n = 40$.
+
+------------------------------------------------------------------------
+
+## 6. AI Prompting Record
+
+The simulation code was developed with the assistance of AI: 1. The initial Quarto file was uploaded, and the AI was prompted to generate code for the project. 2. The AI calculated values but presented limited data/sample graphs, so it was coached through creating a loop for data creation to generate graphs for each value. 3. To gather more information on each curve, prompts were used to add Q-Q plots and kurtosis values. 4. Because viewing over 100 plots in R is difficult, the AI (Gemini) was consulted to add lines that output the data and graphs into a more easily readable PDF. 5. Final manual tweaks included quadrupling the amount of simulations run and increasing the $n$ values to range from $10$ to $40$ instead of $10$ to $30$.
